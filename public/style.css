@@ -1,0 +1,25 @@
+body { font-family: system-ui, sans-serif; margin: 2rem; color: #1a1a1a; }
+main { max-width: 1000px; margin: auto; }
+section { border: 1px solid #ddd; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+h2 { margin-top: 0; }
+table { border-collapse: collapse; width: 100%; margin-top: .5rem; }
+th, td { border: 1px solid #ddd; padding: .35rem .6rem; text-align: left; font-size: .88rem; vertical-align: top; }
+form { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+input, select, button { font: inherit; padding: .3rem .5rem; }
+button { cursor: pointer; }
+#rotation-detail { margin-top: 1rem; }
+.rotation-actions { display: flex; gap: .75rem; align-items: center; margin: .5rem 0; }
+#rotations-body tr { cursor: pointer; }
+tr.selected { background: #eff6ff; }
+.badge { padding: .1rem .55rem; border-radius: 999px; font-size: .75rem; font-weight: 600; white-space: nowrap; }
+.badge[data-status="pending"] { background: #e2e8f0; }
+.badge[data-status="in_progress"] { background: #dbeafe; }
+.badge[data-status="succeeded"] { background: #dcfce7; }
+.badge[data-status="failed"] { background: #fee2e2; }
+.badge[data-status="needs_review"] { background: #fef9c3; }
+.badge[data-status="skipped"] { background: #f3e8ff; }
+.badge[data-status="running"] { background: #dbeafe; }
+.badge[data-status="completed"] { background: #dcfce7; }
+.badge[data-status="completed_with_failures"] { background: #fee2e2; }
+#error { color: #b91c1c; }
+#open-result { font-family: ui-monospace, monospace; word-break: break-all; }

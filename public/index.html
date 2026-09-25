@@ -1,1 +1,86 @@
-<!doctype html><html><body><main><h1>Envelope rotation review</h1><button id="load">Show key versions</button><pre id="keys"></pre></main><script type="module" src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Envelope rotation review</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <h1>Envelope rotation review</h1>
+
+  <section id="keys-section">
+    <h2>Master key versions</h2>
+    <form id="key-form">
+      <input id="key-id" placeholder="key version id" required>
+      <button type="submit">Add key version</button>
+    </form>
+    <table>
+      <thead><tr><th>Version</th><th>Status</th><th>Created seq</th><th></th></tr></thead>
+      <tbody id="keys-body"></tbody>
+    </table>
+  </section>
+
+  <section id="envelopes-section">
+    <h2>Envelopes &amp; data keys</h2>
+    <form id="envelope-form">
+      <input id="envelope-id" placeholder="envelope id" required>
+      <select id="envelope-key" required></select>
+      <input id="envelope-digest" placeholder="payload digest" required>
+      <button type="submit">Seal envelope</button>
+    </form>
+    <table>
+      <thead><tr><th>Envelope</th><th>Current key version</th><th>Data key wraps</th></tr></thead>
+      <tbody id="envelopes-body"></tbody>
+    </table>
+  </section>
+
+  <section id="open-section">
+    <h2>Open envelope</h2>
+    <form id="open-form">
+      <input id="open-id" placeholder="envelope id" required>
+      <input id="open-version" placeholder="key version (optional, for historical reads)">
+      <button type="submit">Open</button>
+    </form>
+    <p id="open-result"></p>
+  </section>
+
+  <section id="rotations-section">
+    <h2>Rotation tasks</h2>
+    <form id="rotation-form">
+      <select id="rotation-from" required></select>
+      <select id="rotation-to" required></select>
+      <button type="submit">Start rotation</button>
+    </form>
+    <table>
+      <thead><tr><th>Id</th><th>From → To</th><th>Status</th><th>Items</th></tr></thead>
+      <tbody id="rotations-body"></tbody>
+    </table>
+    <div id="rotation-detail">
+      <h3 id="rotation-title">No rotation selected</h3>
+      <div class="rotation-actions">
+        <label>Batch size <input id="batch-size" type="number" min="1" value="2"></label>
+        <button id="process-batch" type="button">Process next batch</button>
+        <button id="commit-batch" type="button">Commit in-progress</button>
+        <button id="retry-failed" type="button">Retry failed</button>
+      </div>
+      <table>
+        <thead><tr><th>Envelope</th><th>Status</th><th>Attempts</th><th>Failure reason</th><th>Updated seq</th><th></th></tr></thead>
+        <tbody id="items-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="events-section">
+    <h2>Transition log</h2>
+    <table>
+      <thead><tr><th>Seq</th><th>Type</th><th>Detail</th></tr></thead>
+      <tbody id="events-body"></tbody>
+    </table>
+  </section>
+
+  <p id="error" role="alert"></p>
+</main>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

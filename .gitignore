@@ -10,3 +10,5 @@ coverage/
 *.p12
 *.log
 .DS_Store
+# server-side key store: contains master key material, must never be committed
+data/
