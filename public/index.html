@@ -1,1 +1,101 @@
-<!doctype html><html><body><main><h1>Envelope rotation review</h1><button id="load">Show key versions</button><pre id="keys"></pre></main><script type="module" src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>密文信封轮换审阅</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 2rem; color: #1c1c1e; }
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.1rem; border-bottom: 1px solid #ddd; padding-bottom: .3rem; }
+  section { margin-bottom: 2rem; }
+  table { border-collapse: collapse; width: 100%; margin-top: .5rem; }
+  th, td { border: 1px solid #ddd; padding: .3rem .6rem; text-align: left; font-size: .9rem; vertical-align: top; }
+  th { background: #f5f5f7; }
+  button { margin: .1rem .2rem .1rem 0; cursor: pointer; }
+  input, select { margin: .1rem .2rem .1rem 0; }
+  .badge { display: inline-block; padding: .1rem .5rem; border-radius: .7rem; font-size: .8rem; white-space: nowrap; }
+  .badge.pending { background: #e8e8ed; }
+  .badge.processing { background: #cfe4ff; }
+  .badge.succeeded { background: #c9f2d4; }
+  .badge.failed { background: #ffd6d6; }
+  .badge.needs_confirmation { background: #ffe9b8; }
+  .badge.running { background: #cfe4ff; }
+  .badge.completed { background: #c9f2d4; }
+  .badge.attention_required { background: #ffe9b8; }
+  .muted { color: #777; font-size: .8rem; }
+  .error { color: #b00020; font-size: .85rem; }
+  #notice { min-height: 1.2rem; color: #0a6b2d; }
+  #notice.error { color: #b00020; }
+  .tabs button.active { font-weight: bold; text-decoration: underline; }
+  details { margin-top: .3rem; }
+  code { background: #f5f5f7; padding: 0 .3rem; border-radius: .2rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>密文信封轮换审阅</h1>
+  <p id="notice"></p>
+
+  <section id="keys-section">
+    <h2>主密钥版本</h2>
+    <form id="key-form">
+      <input id="key-id" placeholder="密钥 ID，如 mk" required>
+      <button type="submit">创建密钥</button>
+    </form>
+    <table id="keys-table">
+      <thead><tr><th>密钥</th><th>当前版本</th><th>版本（状态 / 指纹）</th><th>操作</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="envelopes-section">
+    <h2>密文信封</h2>
+    <form id="envelope-form">
+      <input id="envelope-id" placeholder="信封 ID" required>
+      <select id="envelope-key" required></select>
+      <input id="envelope-digest" placeholder="密文摘要" required>
+      <button type="submit">封存信封</button>
+    </form>
+    <table id="envelopes-table">
+      <thead><tr><th>信封</th><th>摘要</th><th>当前主密钥引用</th><th>包裹历史</th><th>操作</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div id="decrypt-result"></div>
+  </section>
+
+  <section id="rotations-section">
+    <h2>轮换任务</h2>
+    <form id="rotation-form">
+      <input id="rotation-from" placeholder="源引用，如 mk@1" required>
+      <input id="rotation-to" placeholder="目标引用，如 mk@2" required>
+      <input id="rotation-batch-size" type="number" min="1" value="2" title="批次大小">
+      <input id="rotation-max-attempts" type="number" min="1" value="2" title="最大尝试次数">
+      <button type="submit">创建轮换</button>
+    </form>
+    <table id="rotations-table">
+      <thead><tr><th>任务</th><th>从</th><th>到</th><th>状态</th><th>进度</th><th>操作</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="rotation-detail" hidden>
+    <h2>轮换详情 <span id="detail-title"></span></h2>
+    <p>
+      状态：<span id="detail-status"></span>
+      策略：最多尝试 <input id="policy-max-attempts" type="number" min="1" style="width:4rem"> 次
+      <button id="policy-save">更新重试策略</button>
+    </p>
+    <div id="batches" class="tabs"></div>
+    <table id="items-table">
+      <thead><tr><th>信封</th><th>状态</th><th>尝试</th><th>最近失败原因</th><th>操作</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <details>
+      <summary>状态转换记录（含来源）</summary>
+      <pre id="item-history"></pre>
+    </details>
+  </section>
+</main>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
